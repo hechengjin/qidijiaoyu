@@ -1,0 +1,35 @@
+
+db.createUser({ user: 'admin', pwd: 'firemail', roles:['root']})
+db.createUser({user:'admin',pwd:'firemail',roles:[{role:'dbOwner',db:'admin'}]}) 
+db.auth('admin','firemail')
+show dbs
+ 
+use qidijiaoyu   ----创建或切换到数据库
+---给数据库添加集合(users)并添加记录
+db.users.insert({name:"admin",password:"firemail",email:"firemail.wang@qq.com"});
+db.users.insert({name:"test",password:"11111",email:"1111@qq.com"});
+db.users.insert({name:"admin@qidijiaoyu",password:"firemail",email:"firemail.wang@qq.com"});
+
+---查看所有数据库
+show dbs
+-----查看所有集合
+show collections
+
+-----查找索引集合
+db.system.indexes.find();
+
+----查询指定集合中的数据
+db.users.find();
+db.users.findOne();  //查询第一条
+
+---更新集合中的数据
+db.users.update({name:"test"},{$set:{password:"2222"}});
+不用修改器set，会冲掉原来的字段
+update默认只修改查询到的符合条件的第一条。
+-----删除集合中的数据
+db.users.remove({name:"test"});
+
+
+
+
+db.oneRecords.insert();

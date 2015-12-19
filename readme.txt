@@ -33,3 +33,4 @@ express -V
  "express-session": "1.12.1",
     "connect-mongo": "1.0.2"
  但传store参数(会话信息存储在数据库中，便于持久维护)，老报  throw new Error('Connection strategy not found'); 错误
+ 
