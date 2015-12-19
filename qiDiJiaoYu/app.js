@@ -7,6 +7,8 @@ var bodyParser = require('body-parser');
 var partials = require('express-partials');
 var routes = require('./routes/index');
 var settings = require('./settings');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var app = express();
 
 // view engine setup
@@ -21,6 +23,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+    secret: settings.cookieSecret,
+    key: settings.db,//cookie name
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
+    /*
+    //先不传store参数，老报  throw new Error('Connection strategy not found'); 错误
+    store: new MongoStore({
+        db: settings.db,
+        host: settings.host,
+        port: settings.port
+    })
+    */
+}));
 
 routes(app);
 

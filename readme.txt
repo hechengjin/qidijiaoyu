@@ -29,3 +29,7 @@ express -V
  "kerberos": "0.0.17",
  "mongodb": "2.0.52"
  
+5.增加会话支持
+ "express-session": "1.12.1",
+    "connect-mongo": "1.0.2"
+ 但传store参数(会话信息存储在数据库中，便于持久维护)，老报  throw new Error('Connection strategy not found'); 错误

@@ -15,6 +15,8 @@
     "serve-favicon": "~2.3.0",
     "express-partials": "*",
     "kerberos": "0.0.17",
-    "mongodb": "2.0.52"
+    "mongodb": "2.0.52",
+    "express-session": "1.12.1",
+    "connect-mongo": "1.0.2"
   }
 }
