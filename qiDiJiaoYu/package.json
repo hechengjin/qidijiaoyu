@@ -13,6 +13,8 @@
     "express": "~4.13.1",
     "morgan": "~1.6.1",
     "serve-favicon": "~2.3.0",
-    "express-partials": "*"
+    "express-partials": "*",
+    "kerberos": "0.0.17",
+    "mongodb": "2.0.52"
   }
 }
