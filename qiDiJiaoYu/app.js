@@ -25,17 +25,19 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-    secret: settings.cookieSecret,
-    key: settings.db,//cookie name
-    cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
-    /*
-    //先不传store参数，老报  throw new Error('Connection strategy not found'); 错误
-    store: new MongoStore({
-        db: settings.db,
-        host: settings.host,
-        port: settings.port
-    })
-    */
+  secret: settings.cookieSecret,
+  key: settings.db,//cookie name
+  cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
+  /*
+  //先不传store参数，老报  throw new Error('Connection strategy not found'); 错误
+  store: new MongoStore({
+      db: settings.db,
+      host: settings.host,
+      port: settings.port
+  })
+  */
+  resave:false,
+  saveUninitialized:true
 }));
 
 //使用中间件来返回成功和失败的信息
