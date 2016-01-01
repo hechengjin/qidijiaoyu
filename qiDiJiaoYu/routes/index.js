@@ -15,6 +15,11 @@ module.exports = function(app) {
       });
     })
 	});
+  app.get('/publish', function(req, res, next) {  //发布
+    res.render('publish', {
+      title: '启迪教育'
+    });
+  });
 	app.get('/u/:user', function(req, res, next) {  //用户信息
 		//res.render('index', { title: '启迪教育' });
     User.find(req.params.user, function(err, user){
@@ -47,8 +52,27 @@ module.exports = function(app) {
       req.session.success = "发表成功";
       res.redirect('/u/' + currentUser.name);
     });
-	});	
-	app.get('/reg', function(req, res, next) {  //注册
+	});
+  app.post('/recordAdd', function(req, res, next) {  //发布内容
+    //res.render('index', { title: '启迪教育' });
+    //console.log(req.body.data)
+    //alert(req.body.data)
+    var currentUser = req.session.user;
+    //alert(req.body.records )
+
+    //var postInfo = eval('(' + req.body.data + ')')
+    var postInfo ={title:req.body.title, content:req.body.content, attachment: req.body.attachment,remarks: req.body.remarks, records: req.body.records};
+    var post = new Post(currentUser.name, postInfo );
+    post.save(function(err) {
+      if (err) {
+        req.session.error = err;
+        return res.redirect('/');
+      }
+      req.session.success = "发表成功";
+      res.redirect('/u/' + currentUser.name);
+    });
+  });
+  app.get('/reg', function(req, res, next) {  //注册
 		res.render('reg', { title: '用户注册', layout: 'layout' });
 	});
   app.post('/doReg', function(req, res, next) {  //
@@ -116,7 +140,7 @@ module.exports = function(app) {
 			}
 			req.session.user = user;
 			req.session.success = "登录成功";
-			res.redirect("/");
+			res.redirect("/publish");
 		})
 	});
 

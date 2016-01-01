@@ -1,0 +1,44 @@
+<script type="text/javascript" src="/javascripts/publish.js"></script>
+
+<div id='pop-div' style="width: 500px" class="pop-box" >
+    <h4>添加子项</h4>
+    <div class="pop-box-body" >
+        <span class="label label-info">标题</span><input type="text" class="span3" name="popTitle" id="popTitle"><br>
+        <span class="label label-info">内容</span> <textarea class="span3" name="popContent" id="popContent"></textarea><br>
+        <span class="label label-info">附件</span> <input type="text" class="span3" name="popAttachment" id="popAttachment"><br>
+        <span class="label label-info">备注</span> <textarea  class="span3" name="popRemarks" id="popRemarks"></textarea><br>
+    </div>
+    <div class='buttonPanel' style="text-align: right" style="text-align: right">
+        <input value="确定" id="btn1" class="btn btn-lg btn-primary" onclick="SubRecordSubmit();" type="button" />
+        <input value="取消" id="btn2" class="btn btn-lg btn-primary" onclick="hideDiv('pop-div');" type="button" />
+    </div>
+</div>
+
+<div class="container" background="../images/header_bg.png">
+
+    <span class="label label-info">标题</span><input type="text" class="span8" name="title" id="title"><br>
+    <span class="label label-info">内容</span> <textarea class="span8" name="content" id="content"></textarea><br>
+    <span class="label label-info">附件</span> <input type="text" class="span8" name="attachment" id="attachment"><br>
+    <span class="label label-info">备注</span> <textarea class="span8" name="remarks" id="remarks"></textarea><br>
+
+    <span class="label label-default">子项列表</span> <button class="btn btn-lg btn-primary " onclick="AddSubRecord()">添加子项</button>
+    <div class="table-responsive">
+        <table class="table table-striped" id="subitemsTable">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>标题</th>
+                <th>内容</th>
+                <th>附件</th>
+                <th>备注</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <button class="btn btn-lg btn-primary" onclick="recordAdd()">发布</button>
+
+
+</div> <!-- /container -->
+

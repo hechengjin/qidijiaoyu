@@ -5,6 +5,9 @@ function Post(username, post, time) {
   this.user = username;
   this.title = post.title;
   this.content = post.content;
+  this.attachment = post.attachment;
+  this.remarks = post.remarks;
+  this.records = post.records;
   if (time) {
     this.time = time;
   } else {
@@ -66,6 +69,9 @@ Post.prototype.save = function save(callback) {
     user: this.user,
     title: this.title,
     content: this.content,
+    attachment: this.attachment,
+    remarks: this.remarks,
+    records: this.records,
     time: this.time,
   };
   mongodb.open(function(err, db) {
