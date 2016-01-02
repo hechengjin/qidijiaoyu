@@ -78,7 +78,7 @@ Post.prototype.save = function save(callback) {
     if (err) {
       return callback(err);
     }
-    db.authenticate(settings.username,settings.password ,function(err, r){
+   // db.authenticate(settings.username,settings.password ,function(err, r){
       // 讀取 posts 集合
       db.collection('posts', function(err, collection) {
         if (err) {
@@ -93,7 +93,7 @@ Post.prototype.save = function save(callback) {
           callback(err, post);
         });
       });
-    });
+    //});
   });
 };
 /*

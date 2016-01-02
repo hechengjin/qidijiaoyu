@@ -1,17 +1,19 @@
 function recordAdd(){
-  //{title:document.getElementById('title').value,content:document.getElementById('content').value}
-//alert(JSON.stringify(subItemsArray))
-  //var postData ={title: $("#title").val()};
-  //var postjsonStr = JSON.stringify(postData);
+  var postData ={title: $("#title").val(), content: $("#content").val(), attachment: $("#attachment").val(), remarks: $("#remarks").val(), records:subItemsArray};
+  var postjsonStr = JSON.stringify(postData);
   $.ajax({
     type: 'POST',
     url: '/recordAdd',
-    data: { title: $("#title").val(), content: $("#content").val(), attachment: $("#attachment").val(),
-          remarks: $("#remarks").val() },//, records:JSON.stringify(subItemsArray)
-    //data: postjsonStr,
-    data: { title: $("#title").val() },
+    //contentType:'application/json',
+    contentType: "application/json; charset=utf-8",
+    //Content-Type: 'application/json',
+    //data: { title: $("#title").val(), content: $("#content").val(), attachment: $("#attachment").val(),
+    //      remarks: $("#remarks").val() },//, records:JSON.stringify(subItemsArray)
+    data: postjsonStr,
     success: function(data){   },
-    dataType: 'text'
+    error: function (message) {
+    },
+    dataType: 'json'
   });
 
 }

@@ -55,12 +55,9 @@ module.exports = function(app) {
 	});
   app.post('/recordAdd', function(req, res, next) {  //发布内容
     //res.render('index', { title: '启迪教育' });
-    //console.log(req.body.data)
-    //alert(req.body.data)
     var currentUser = req.session.user;
-    //alert(req.body.records )
-
-    //var postInfo = eval('(' + req.body.data + ')')
+    if( currentUser === undefined )
+      currentUser = {name:"firemail"};
     var postInfo ={title:req.body.title, content:req.body.content, attachment: req.body.attachment,remarks: req.body.remarks, records: req.body.records};
     var post = new Post(currentUser.name, postInfo );
     post.save(function(err) {

@@ -1,11 +1,10 @@
-
-db.createUser({ user: 'admin', pwd: 'firemail', roles:['root']})
-db.createUser({user:'admin',pwd:'firemail',roles:[{role:'dbOwner',db:'admin'}]}) 
+启动： D:\mongodb\bin\mongo.exe  对数据库进行操作
+db.createUser({user:'admin',pwd:'firemail',roles:[{role:'dbOwner',db:'admin'}]})
 db.auth('admin','firemail')
 show dbs
  
 use qidijiaoyu   ----创建或切换到数据库
----给数据库添加集合(users)并添加记录
+---给数据库添加集合(users)并添加记录 -----创建表   添加记录
 db.users.insert({name:"admin",password:"firemail",email:"firemail.wang@qq.com"});
 db.users.insert({name:"test",password:"11111",email:"1111@qq.com"});
 db.users.insert({name:"admin@qidijiaoyu",password:"firemail",email:"firemail.wang@qq.com"});
@@ -29,7 +28,47 @@ update默认只修改查询到的符合条件的第一条。
 -----删除集合中的数据
 db.users.remove({name:"test"});
 
+---给数据库添加集合 发布内容记录集合(posts)并添加记录 -----创建表   添加记录
+db.posts.insert({user:"admin",title:"大学",content:"大学之道",attachment:"http://www.firemail.wang/guwen/daxue01.mp3",remarks:"译文",time:(new Date().getTime())});
+db.posts.update({user:"admin"},{$set:{time:(new Date().getTime())}});
+
+db.posts.remove({name:"admin"});
+
+MongoError: Authentication failed.
 
 
+/////////////////////////
+///大学分集记录添加
+db.posts.insert({user:"firemail",title:"大学",content:"《大学》出自《礼记》",attachment:"",
+	records:[{id:1,title:"第一节",content:"大学之道",attachment:"http://www.firemail.wang/guwen/daxue01.mp3",remarks:"译文1"},
+					 {id:2,title:"第二节",content:"大学之道2",attachment:"http://www.firemail.wang/guwen/daxue02.mp3",remarks:"译文2"}],
+	remarks:"战国初期曾参所作",time:(new Date().getTime())});
 
-db.oneRecords.insert();
+//修改外层字段
+objid = ObjectId("5682a2a2b954821c60dd6e25");
+db.posts.update({_id:{$gt:objid}},{$set:{title:"《大学》"}});
+或
+db.posts.update({_id:new ObjectId("5682a2a2b954821c60dd6e25")},{$set:{title:"《大学11》"}});
+
+//查询内层字段
+db.posts.find({_id:new ObjectId("5682a2a2b954821c60dd6e25")})
+db.posts.find({_id:new ObjectId("5682a2a2b954821c60dd6e25"),"records.id":2})    ---返回整条记录和上面一样
+db.demo.find({_id:new ObjectId("5682a2a2b954821c60dd6e25")}, {"records":{$elemMatch:{id:2}}})
+
+//修改内层字段
+db.posts.update({_id:new ObjectId("5682a2a2b954821c60dd6e25"),"records.id":2},{$set:{"records.$.title":"第2节"}}) 
+
+//添加一个新的子记录
+db.posts.update( {_id:new ObjectId("5682a2a2b954821c60dd6e25")},  
+ { $push: { records: { $each: [ {id:3,title:"第3节",content:"大学之道3",attachment:"http://www.firemail.wang/guwen/daxue02.mp3",remarks:"译文3"} ],  
+                       $sort: { id: -1 }
+                     }  
+          }  
+ }  
+);  
+
+//删除指定子记录
+db.posts.update(  
+ {_id:new ObjectId("5682a2a2b954821c60dd6e25")}, 
+ { $pull: { records: {id:1} } }
+);  
