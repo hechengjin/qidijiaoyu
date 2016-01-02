@@ -3,9 +3,9 @@
     <div class="row">
   <%}%>
   <div class="span4">
-    <h2><a href="/u/<%=post.user%>"><%=post.user %></a>说</h2>
-    <p><small><%=post.time%></small></p>
-    <p><%=post.title%></p>
+    <h2><%=post.title%></h2>
+    <p><a href="/u/<%=post.user%>"><%=post.user%></a>&amp;nbsp;<small><%=post.time%></small></p>
+    <p></p>
     <p><%=post.content%></p>
   </div>
   <% if(index % 3 === 2) {%>
