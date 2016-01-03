@@ -109,7 +109,15 @@ module.exports = function(app) {
        });
     });
   });
+  app.get('/read', function(req, res, next) {
+    Post.findById(req.query.id, function(err, post){
+      if(err){
+        console.log(err);
+      }
+      res.render('read', { err: null, post:post });
+    });
 
+  });
 
   app.post('/recordModify', function(req, res, next) {  //发布内容
     //res.render('index', { title: '启迪教育' });

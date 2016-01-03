@@ -1,0 +1,38 @@
+<script type="text/javascript" src="/javascripts/read.js"></script>
+<div class="container">
+<h2 onclick="play('<%=post.attachment%>','<%=post.content%>','<%=post.remarks%>')"><%=post.title%></h2>
+    <button class="btn btn-success" onclick="getVtt('<%=post.id%>')">获取vtt路径</button>
+<div>
+    <p id="recordId" hidden></p>
+    <video id='video'  poster="../images/vidiobk.png" height='300px' with='600px' controls autoplay loop heith='50px'>
+        <source src='<%=post.attachment%>'>
+        <track id='track' label='正体中文'  src='<%=post.remarks%>'  kind="subtitles"  srclang="zh-tw"  default onload='loadCaptions(this)'>
+    </video>
+</div>
+<div>
+    <br/>
+    <span id="content"><%=post.content%></span>
+    <br/>
+</div>
+<div>
+    <br/>
+    <span id="remarks" hidden><%=post.remarks%></span>
+</div>
+
+    <% post.records.forEach(function(record, index) {
+            if( index % 3 == 0) {%>
+    <div class="row">
+        <%}%>
+        <div class="span4">
+            <p><button class="btn btn-success" onclick="play('<%=record.attachment%>','<%=record.content%>','<%=record.remarks%>','<%=record.id%>')"><%=record.title%></button></p>
+        </div>
+        <% if(index % 3 === 2) {%>
+    </div> <!--结束行--->
+    <%}%>
+    <%})%>
+
+    <% if (post.records.length % 3 !== 0) { %>
+        </div> <!--结束行--->
+    <%}%>
+</div> <!-- /container -->
+
