@@ -1,12 +1,18 @@
+<script type="text/javascript" src="/javascripts/posts.js"></script>
 <% posts.forEach(function(post, index) {
   if( index % 3 == 0) {%>
     <div class="row">
   <%}%>
   <div class="span4">
     <h2><%=post.title%></h2>
-    <p><a href="/u/<%=post.user%>"><%=post.user%></a>&amp;nbsp;<small><%=post.time%></small></p>
+    <p><a href="/u/<%=post.user%>"><%=post.user%></a>&nbsp;&nbsp;<small><%=post.time%></small></p>
     <p></p>
     <p><%=post.content%></p>
+    <!-- <p><button onclick="recordQueryForModify('<%=post.id%>')">修改</button></p> -->
+    <p><div style="display:block; width:80px; float:left;"><button class="btn btn-success" onclick="recordDelete('<%=post.id%>')">删除</button></div><form method="post" action="/recordQueryForModifyByForm" style="text-align:left;">
+          <input type="hidden" name="id" value="<%=post.id%>">
+          <button type="submit" class="btn btn-success">修改</button>
+      </form></p>
   </div>
   <% if(index % 3 === 2) {%>
     </div> <!--结束行--->

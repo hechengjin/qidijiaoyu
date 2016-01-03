@@ -1,3 +1,8 @@
+<script type="text/javascript">
+    var post = '<%- JSON.stringify(locals.post) %>';
+    if( post.length > 0 )
+       post = JSON.parse(post);
+</script>
 <script type="text/javascript" src="/javascripts/publish.js"></script>
 
 <div id='pop-div' style="width: 500px" class="pop-box" >
@@ -37,7 +42,7 @@
             </tbody>
         </table>
     </div>
-    <button class="btn btn-lg btn-primary" onclick="recordAdd()">发布</button>
+    <button class="btn btn-lg btn-primary" onclick="recordPublish()">发布</button>
 
 
 </div> <!-- /container -->

@@ -16,7 +16,14 @@ module.exports = function(app) {
     })
 	});
   app.get('/publish', function(req, res, next) {  //发布
+    //console.log("_id:" + req.params.id)
     res.render('publish', {
+      title: '启迪教育'
+    });
+  });
+
+  app.get('/say', function(req, res, next) {  //发布
+    res.render('say', {
       title: '启迪教育'
     });
   });
@@ -39,20 +46,7 @@ module.exports = function(app) {
       })
     });
 	});
-	app.post('/post', function(req, res, next) {  //发布内容
-		//res.render('index', { title: '启迪教育' });
-    var currentUser = req.session.user;
-    var postInfo ={title:req.body.title, content:req.body.content};
-    var post = new Post(currentUser.name, postInfo );
-    post.save(function(err) {
-      if (err) {
-        req.session.error = err;
-        return res.redirect('/');
-      }
-      req.session.success = "发表成功";
-      res.redirect('/u/' + currentUser.name);
-    });
-	});
+
   app.post('/recordAdd', function(req, res, next) {  //发布内容
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;
@@ -66,9 +60,91 @@ module.exports = function(app) {
         return res.redirect('/');
       }
       req.session.success = "发表成功";
-      res.redirect('/u/' + currentUser.name);
+      //res.redirect('/u/' + currentUser.name);
+      var sendData = { err: null, username:currentUser.name};
+      res.send(sendData);
     });
   });
+
+  app.post('/post', function(req, res, next) {  //发布内容
+    //res.render('index', { title: '启迪教育' });
+    var currentUser = req.session.user;
+    if( currentUser === null || currentUser === undefined )
+      currentUser = "firemail";
+    var postInfo ={title:req.body.title, content:req.body.content};
+    var post = new Post(currentUser, postInfo );
+    post.save(function(err) {
+      if (err) {
+        req.session.error = err;
+        return res.redirect('/');
+      }
+      req.session.success = "发表成功";
+      res.redirect('/u/' + currentUser);
+    });
+  });
+
+  app.post('/recordQueryForModify', function(req, res, next) {
+    Post.findById(req.body.id, function(err, post){
+      if(err){
+        console.log(err);
+      }
+      /*
+      //res.redirect('/');//return res.redirect("/publish");
+      res.render('publish', {
+        id: req.body.id
+      });
+      */
+      var sendData = { err: null, post:post};
+      res.send(sendData);
+    });
+  });
+
+  app.post('/recordQueryForModifyByForm', function(req, res, next) {
+    Post.findById(req.body['id'], function(err, post){
+      if(err){
+        console.log(err);
+      }
+       res.render('publish', {
+         post:post
+       });
+    });
+  });
+
+
+  app.post('/recordModify', function(req, res, next) {  //发布内容
+    //res.render('index', { title: '启迪教育' });
+    var currentUser = req.session.user;
+    if( currentUser === undefined )
+      currentUser = {name:"firemail"};
+    var postInfo ={id:req.body.id, title:req.body.title, content:req.body.content, attachment: req.body.attachment,remarks: req.body.remarks, records: req.body.records};
+    var post = new Post(currentUser.name, postInfo );
+    post.update(function(err) {
+      if (err) {
+        req.session.error = err;
+        return res.redirect('/');
+      }
+      req.session.success = "发表成功";
+      //res.redirect('/u/' + currentUser.name);
+      var sendData = { err: null, username:currentUser.name};
+      res.send(sendData);
+    });
+  });
+
+
+  app.post('/recordDelete', function(req, res, next) {  //删除内容
+    var currentUser = req.session.user;
+    if( currentUser === undefined )
+      currentUser = {name:"firemail"};
+    Post.deletyByPostID(req.body.id, function(err, posts){
+      if(err){
+        console.log(err);
+      }
+      console.log("---deletyByPostID ")
+      var sendData = { err: null, username:currentUser.name};
+      res.send(sendData);
+    })
+  });
+
   app.get('/reg', function(req, res, next) {  //注册
 		res.render('reg', { title: '用户注册', layout: 'layout' });
 	});

@@ -3,6 +3,7 @@ var settings = require('../settings');
 
 function Post(username, post, time) {
   this.user = username;
+  this.id = 0;
   this.title = post.title;
   this.content = post.content;
   this.attachment = post.attachment;
@@ -13,10 +14,14 @@ function Post(username, post, time) {
   } else {
     this.time = new Date().getTime();
   }
+  if( post.id ){
+    this.id = post.id;
+  }
+  //console.log( "this.id:" + this.id + " +++++")
 };
 
 
-Post.find = function get(username, callback) {
+Post.find = function find(username, callback) {
   mongodb.open(function(err, db) {
     if (err) {
       return callback(err);
@@ -48,7 +53,7 @@ Post.find = function get(username, callback) {
           docs.forEach(function(doc, index) {
             var postTime = new Date(doc.time);
             postTime = postTime.toLocaleDateString() + " " + postTime.toLocaleTimeString();
-            var postInfo ={title:doc.title, content:doc.content}
+            var postInfo ={id:doc._id.toString(), title:doc.title, content:doc.content}
             var post = new Post(doc.user, postInfo, postTime);
             posts.push(post);
           });
@@ -57,6 +62,74 @@ Post.find = function get(username, callback) {
       });
    // });
 
+  });
+};
+
+Post.findById = function findById(postId, callback) {
+  mongodb.open(function(err, db) {
+    if (err) {
+      return callback(err);
+    }
+    db.collection('posts', function(err, collection) {
+      if (err) {
+        mongodb.close();
+        return callback(err);
+      }
+      // 查找 user 屬性爲 username 的文檔，如果 username 是 null 則匹配全部
+      var query = {};
+      if (postId) {
+        var obj_id = require('mongodb').ObjectID.createFromHexString(postId);
+        query._id = obj_id;
+      }
+      collection.find(query).sort({time: -1}).toArray(function(err, docs) {
+        mongodb.close();
+        if (err) {
+          callback(err, null);
+        }
+        var posts = [];
+        docs.forEach(function(doc, index) {
+          var postTime = new Date(doc.time);
+          postTime = postTime.toLocaleDateString() + " " + postTime.toLocaleTimeString();
+          var postInfo ={id:doc._id.toString(), title:doc.title, content:doc.content, attachment: doc.attachment,
+                          remarks: doc.remarks, records: doc.records}
+          var post = new Post(doc.user, postInfo, postTime);
+          posts.push(post);
+        });
+        callback(null, posts[0]);
+      });
+    });
+  });
+};
+
+
+
+Post.deletyByPostID = function deletyByPostID(postId, callback) {
+  mongodb.open(function(err, db) {
+    if (err) {
+      return callback(err);
+    }
+    // 讀取 posts 集合
+    db.collection('posts', function(err, collection) {
+      if (err) {
+        mongodb.close();
+        return callback(err);
+      }
+      var query = {};
+      if (postId) {
+        //var BSON = require('mongodb').BSONPure;
+        //console.log(Object.keys())
+        //console.log(postId)
+        var obj_id = require('mongodb').ObjectID.createFromHexString(postId);
+        query._id = obj_id;
+      }
+      collection.remove(query ,{safe:true},function(err,result) {
+        mongodb.close();
+        if (err) {
+          callback(err, null);
+        }
+        callback(null, null);
+      });
+    });
   });
 };
 
@@ -96,6 +169,48 @@ Post.prototype.save = function save(callback) {
     //});
   });
 };
+
+
+Post.prototype.update = function update(callback) {
+  // 存入 Mongodb 的文檔
+  var post = {
+    //user: this.user,
+    title: this.title,
+    content: this.content,
+    attachment: this.attachment,
+    remarks: this.remarks,
+    records: this.records,
+    //time: this.time,
+  };
+  var self = this;
+  mongodb.open(function(err, db) {
+    if (err) {
+      return callback(err);
+    }
+    // db.authenticate(settings.username,settings.password ,function(err, r){
+    // 讀取 posts 集合
+    db.collection('posts', function(err, collection) {
+      if (err) {
+        mongodb.close();
+        return callback(err);
+      }
+      var query = {};
+      console.log("self.id:"+self.id)
+      if (self.id != 0 ) {
+        var obj_id = require('mongodb').ObjectID.createFromHexString(self.id);
+        query._id = obj_id;
+        collection.update(query, {$set:post},{safe: true}, function(err,result) {
+          mongodb.close();
+          callback(err, result);
+        });
+      } else {
+        mongodb.close();
+      }
+    });
+    //});
+  });
+};
+
 /*
 //获取分页数据
 Post.getUserPage = function getUserPage(username,page,size, callback) {

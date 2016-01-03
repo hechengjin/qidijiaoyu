@@ -72,3 +72,13 @@ db.posts.update(
  {_id:new ObjectId("5682a2a2b954821c60dd6e25")}, 
  { $pull: { records: {id:1} } }
 );  
+
+
+//根据_id删除poosts中的一条记录
+db.posts.remove({_id:new ObjectId("5687436a631d0eb42133ec6e")});
+
+///修改内外层字段
+db.posts.update({_id:new ObjectId("568776e9f1c6a67c2c106966")},{$set:{title:"1111", 
+  records:[{ "id" : 11, "title" : "a11", "content" : "b11", "attachment" : "c11", "remarks" : "d11" },
+					 { "id" : 22, "title" : "a22", "content" : "b22", "attachment" : "c22", "remarks" : "d22" }]
+}});
