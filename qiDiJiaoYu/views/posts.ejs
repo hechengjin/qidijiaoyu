@@ -8,11 +8,14 @@
     <p><a href="/u/<%=post.user%>"><%=post.user%></a>&nbsp;&nbsp;<small><%=post.time%></small></p>
     <p></p>
     <p><%=post.content%></p>
-    <!-- <p><button onclick="recordQueryForModify('<%=post.id%>')">修改</button></p> -->
-    <p><div style="display:block; width:80px; float:left;"><button class="btn btn-success" onclick="recordDelete('<%=post.id%>')">删除</button></div><form method="post" action="/recordQueryForModifyByForm" style="text-align:left;">
+      <% if(locals.user && post.user === locals.user.name ) {%>
+      <p><div style="display:block; width:80px; float:left;"><button class="btn btn-success" onclick="recordDelete('<%=post.id%>')">删除</button></div><form method="post" action="/recordQueryForModifyByForm" style="text-align:left;">
           <input type="hidden" name="id" value="<%=post.id%>">
           <button type="submit" class="btn btn-success">修改</button>
       </form></p>
+      <% } else {%>
+      <% } %>
+
   </div>
   <% if(index % 3 === 2) {%>
     </div> <!--结束行--->

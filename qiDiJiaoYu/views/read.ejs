@@ -1,7 +1,11 @@
 <script type="text/javascript" src="/javascripts/read.js"></script>
 <div class="container">
 <h2 onclick="play('<%=post.attachment%>','<%=post.content%>','<%=post.remarks%>')"><%=post.title%></h2>
+    <% if(locals.user && post.user === locals.user.name ) {%>
     <button class="btn btn-success" onclick="getVtt('<%=post.id%>')">获取vtt路径</button>
+    <% } else {%>
+    <% } %>
+
 <div>
     <p id="recordId" hidden></p>
     <video id='video'  poster="../images/vidiobk.png" height='300px' with='600px' controls autoplay loop heith='50px'>
