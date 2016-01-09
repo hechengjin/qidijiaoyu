@@ -62,6 +62,30 @@ module.exports = function(app) {
 
   });
 
+  app.get('/goModPwd', function(req, res, next) {
+    //console.log("_id:" + req.params.id)
+    res.render('modpwd', {
+      title: '修改密码'
+    });
+  });
+
+  app.post('/modpwd', function(req, res, next) {  //查询
+    //console.log("find:"+req.body.keyValue)
+    var newpwd = req.body.newpwd;
+    var currentUser = req.session.user;
+    if( currentUser === undefined )
+      currentUser = {name:"firemail"};
+
+    User.update(currentUser,{password:newpwd}, function(err) {
+      if (err) {
+        req.session.error = err;
+        return res.redirect('/');
+      }
+      req.session.success = "密码修改成功!";
+      res.redirect('/');
+    });
+  });
+
   app.post('/recordAdd', function(req, res, next) {  //发布内容
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;

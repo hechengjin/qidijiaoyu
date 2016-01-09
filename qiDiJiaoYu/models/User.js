@@ -85,21 +85,23 @@ User.prototype.save = function save(callback) {
 User.update = function update(username, arr, callback) {
   mongodb.open(function(err, db) {
     if (err) {
+      console.log("User.update err:"+err)
       return callback(err);
     }
-    db.authenticate(settings.username,settings.password ,function(){
-      callback(err, db);
-    });
     // 讀取 users 集合
     db.collection('users', function(err, collection) {
       if (err) {
+        console.log("db.collection err:" +err)
         mongodb.close();
         return callback(err);
       }
       // 查找 name 屬性爲 username 的文檔
-      collection.update({name: username},{'$set':arr}, function(err, username) {
+      collection.update( username, {$set:arr},{safe: true}, function(err,result) {
+      //collection.update({name: username},{'$set':arr}, function(err, username) {
+        if( err )
+          console.log(err)
         mongodb.close();
-        callback(err, username);
+        callback(err, result);
       });
     });
   });
