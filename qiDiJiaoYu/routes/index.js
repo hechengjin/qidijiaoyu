@@ -47,6 +47,21 @@ module.exports = function(app) {
     });
 	});
 
+  app.post('/find', function(req, res, next) {  //查询
+    //console.log("find:"+req.body.keyValue)
+    var searchValue = req.body.keyValue;
+    Post.find(null, function(err, posts){
+      if(err){
+        req.session.error = err;
+        return req.redirect("/");
+      }
+      res.render("posts",{
+        posts:posts
+      })
+    },searchValue)
+
+  });
+
   app.post('/recordAdd', function(req, res, next) {  //发布内容
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;

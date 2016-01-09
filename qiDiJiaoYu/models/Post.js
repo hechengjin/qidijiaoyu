@@ -21,7 +21,12 @@ function Post(username, post, time) {
 };
 
 
-Post.find = function find(username, callback) {
+Post.find = function find(username, callback, searchValue) {
+
+  if( searchValue === undefined ){
+    searchValue = null;
+  }
+  console.log("find searchValue:"+searchValue + " username:"+username)
   mongodb.open(function(err, db) {
     if (err) {
       return callback(err);
@@ -40,10 +45,18 @@ Post.find = function find(username, callback) {
         }
         // 查找 user 屬性爲 username 的文檔，如果 username 是 null 則匹配全部
         var query = {};
+        var queryContent = {};
+        var queryRecords = {};
         if (username) {
           query.user = username;
         }
-        collection.find(query).sort({time: -1}).toArray(function(err, docs) {
+        if (searchValue) {
+          query['title']=new RegExp(searchValue);//模糊查询参数
+          //query['content']=new RegExp(searchValue);
+          queryContent['content']=new RegExp(searchValue);
+        }
+        //collection.find(query).sort({time: -1}).limit(100).toArray(function(err, docs) {
+        collection.find({"$or": [query,queryContent,{"records":{$elemMatch:query,$elemMatch:queryContent}}]}).sort({time: -1}).limit(100).toArray(function(err, docs) {
           mongodb.close();
           if (err) {
             callback(err, null);

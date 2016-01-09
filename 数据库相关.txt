@@ -1,11 +1,13 @@
 启动： D:\mongodb\bin\mongo.exe  对数据库进行操作
+查看版本号:db.version()  3.2.0
+
 db.createUser({user:'admin',pwd:'firemail',roles:[{role:'dbOwner',db:'admin'}]})
 db.auth('admin','firemail')
 show dbs
  
 use qidijiaoyu   ----创建或切换到数据库
 ---给数据库添加集合(users)并添加记录 -----创建表   添加记录
-db.users.insert({name:"admin",password:"firemail",email:"firemail.wang@qq.com"});
+db.users.insert({name:"firemail",password:"firemail",email:"firemail.wang@qq.com"});
 db.users.insert({name:"test",password:"11111",email:"1111@qq.com"});
 db.users.insert({name:"admin@qidijiaoyu",password:"firemail",email:"firemail.wang@qq.com"});
 
@@ -39,10 +41,10 @@ MongoError: Authentication failed.
 
 /////////////////////////
 ///大学分集记录添加
-db.posts.insert({user:"firemail",title:"大学",content:"《大学》出自《礼记》",attachment:"",
-	records:[{id:1,title:"第一节",content:"大学之道",attachment:"http://www.firemail.wang/guwen/daxue01.mp3",remarks:"译文1"},
-					 {id:2,title:"第二节",content:"大学之道2",attachment:"http://www.firemail.wang/guwen/daxue02.mp3",remarks:"译文2"}],
-	remarks:"战国初期曾参所作",time:(new Date().getTime())});
+db.posts.insert({user:"firemail",title:"大学",content:"《大学》出自《礼记》",attachment:"http://www.firemail.wang/guwen/daxue01.mp3",
+	records:[{id:1,title:"第一节",content:"大学之道",attachment:"http://www.firemail.wang/guwen/daxue01.mp3",remarks:"../vtts/daxue01.vtt"},
+					 {id:2,title:"第二节",content:"大学之道2",attachment:"http://www.firemail.wang/guwen/daxue02.mp3",remarks:"../vtts/daxue02.vtt"}],
+	remarks:"../vtts/daxue01.vtt",time:(new Date().getTime())});
 
 //修改外层字段
 objid = ObjectId("5682a2a2b954821c60dd6e25");
@@ -82,3 +84,12 @@ db.posts.update({_id:new ObjectId("568776e9f1c6a67c2c106966")},{$set:{title:"111
   records:[{ "id" : 11, "title" : "a11", "content" : "b11", "attachment" : "c11", "remarks" : "d11" },
 					 { "id" : 22, "title" : "a22", "content" : "b22", "attachment" : "c22", "remarks" : "d22" }]
 }});
+
+
+精确查询
+当{‘name’:’未来警察’}时，精确匹配到一条记录。
+db.movies.find({'name':'未来警察'})
+
+模糊查询
+{‘name’:/未来/}，匹配到了多条记录。
+db.movies.find({'name':/未来/})
