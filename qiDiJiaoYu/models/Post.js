@@ -46,17 +46,21 @@ Post.find = function find(username, callback, searchValue) {
         // 查找 user 屬性爲 username 的文檔，如果 username 是 null 則匹配全部
         var query = {};
         var queryContent = {};
-        var queryRecords = {};
         if (username) {
           query.user = username;
         }
-        if (searchValue) {
-          query['title']=new RegExp(searchValue);//模糊查询参数
-          //query['content']=new RegExp(searchValue);
-          queryContent['content']=new RegExp(searchValue);
+          if (searchValue) {
+            query['title']=new RegExp(searchValue);//模糊查询参数
+            //query['content']=new RegExp(searchValue);
+            queryContent['content']=new RegExp(searchValue);
+          }
+        var queryCon ={};
+        if (username) {
+          queryCon = query;
+        } else{
+          queryCon ={"$or": [query,queryContent,{"records":{$elemMatch:query}},{"records":{$elemMatch:queryContent}}]};
         }
-        //collection.find(query).sort({time: -1}).limit(100).toArray(function(err, docs) {
-        collection.find({"$or": [query,queryContent,{"records":{$elemMatch:query,$elemMatch:queryContent}}]}).sort({time: -1}).limit(100).toArray(function(err, docs) {
+        collection.find(queryCon).sort({time: -1}).limit(100).toArray(function(err, docs) {
           mongodb.close();
           if (err) {
             callback(err, null);
