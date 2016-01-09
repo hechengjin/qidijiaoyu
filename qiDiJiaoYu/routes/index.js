@@ -71,10 +71,11 @@ module.exports = function(app) {
 
   app.post('/modpwd', function(req, res, next) {  //查询
     //console.log("find:"+req.body.keyValue)
-    var newpwd = req.body.newpwd;
+    var md5 = crypto.createHash('md5');
+    var newpwd = md5.update(req.body.newpwd).digest('base64');
     var currentUser = req.session.user;
     if( currentUser === undefined )
-      currentUser = {name:"firemail"};
+      currentUser = {name:null};
 
     User.update(currentUser,{password:newpwd}, function(err) {
       if (err) {
@@ -90,7 +91,7 @@ module.exports = function(app) {
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;
     if( currentUser === undefined )
-      currentUser = {name:"firemail"};
+      currentUser = {name:null};
     var postInfo ={title:req.body.title, content:req.body.content, attachment: req.body.attachment,remarks: req.body.remarks, records: req.body.records};
     var post = new Post(currentUser.name, postInfo );
     post.save(function(err) {
@@ -109,7 +110,7 @@ module.exports = function(app) {
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;
     if( currentUser === null || currentUser === undefined )
-      currentUser = "firemail";
+      currentUser = null;
     var postInfo ={title:req.body.title, content:req.body.content};
     var post = new Post(currentUser, postInfo );
     post.save(function(err) {
@@ -162,7 +163,7 @@ module.exports = function(app) {
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;
     if( currentUser === undefined )
-      currentUser = {name:"firemail"};
+      currentUser = {name:null};
     var postInfo ={id:req.body.id, title:req.body.title, content:req.body.content, attachment: req.body.attachment,remarks: req.body.remarks, records: req.body.records};
     var post = new Post(currentUser.name, postInfo );
     post.update(function(err) {
@@ -181,7 +182,7 @@ module.exports = function(app) {
   app.post('/recordDelete', function(req, res, next) {  //删除内容
     var currentUser = req.session.user;
     if( currentUser === undefined )
-      currentUser = {name:"firemail"};
+      currentUser = {name:null};
     Post.deletyByPostID(req.body.id, function(err, posts){
       if(err){
         console.log(err);
@@ -204,7 +205,7 @@ module.exports = function(app) {
       }
       //生成口令的散列值
       var md5 = crypto.createHash('md5');
-      var password = req.body.password;//md5.update(req.body.password).digest('base64');
+      var password = md5.update(req.body.password).digest('base64');//req.body.password;
       //声明需要添加的用户
       var newUser = new User({
           name: req.body.username,
@@ -244,9 +245,9 @@ module.exports = function(app) {
 	app.post('/doLogin', function(req, res, next) {  //
 		//res.render('index', { title: '启迪教育' });
 		var md5 = crypto.createHash("md5");
-		var password = req.body.password;// md5.update(req.body.password).digest("base64");
+		var password = md5.update(req.body.password).digest("base64");
 		//验证用户
-    console.log("-----:"+req.body.username);
+   // console.log("-----:"+req.body.username);
 		User.find(req.body.username, function(err, user){
 			//首根据用户名查询是否存在
 			if( !user ){
