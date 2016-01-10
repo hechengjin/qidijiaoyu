@@ -15,6 +15,13 @@ module.exports = function(app) {
       });
     })
 	});
+
+  app.get('/about', function(req, res, next) {
+      res.render('about', {
+        title: '关于'
+      });
+  });
+
   app.get('/publish', function(req, res, next) {  //发布
     //console.log("_id:" + req.params.id)
     res.render('publish', {
