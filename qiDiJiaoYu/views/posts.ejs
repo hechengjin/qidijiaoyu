@@ -7,7 +7,7 @@
     <h2><a href="/read?id=<%=post.id%>"><%=post.title%></a></h2>
     <p><a href="/u/<%=post.user%>"><%=post.user%></a>&nbsp;&nbsp;<small><%=post.time%></small></p>
     <p></p>
-    <p><%=post.content%></p>
+    <p><%=post.content.substr(0,70)%></p>
       <% if(locals.user && post.user === locals.user.name ) {%>
       <p><div style="display:block; width:80px; float:left;"><button class="btn btn-success" onclick="recordDelete('<%=post.id%>')">删除</button></div><form method="post" action="/recordQueryForModifyByForm" style="text-align:left;">
           <input type="hidden" name="id" value="<%=post.id%>">

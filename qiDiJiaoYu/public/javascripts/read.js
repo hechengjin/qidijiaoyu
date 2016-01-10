@@ -2,6 +2,14 @@ function eID(elm) {
   return document.getElementById(elm);  // create short cut to getElementById()
 }
 
+window.onload=function(){
+    initInfo();
+}
+
+function initInfo() {
+  eID("content").innerHTML = post.content;
+}
+
 function loadCaptions(track) {
 // retrive cues for track element
   var cues = track.track.cues;

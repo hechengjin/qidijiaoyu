@@ -27,7 +27,8 @@ function initModInfo() {
 
 
 function recordPublish(){
-  var postData ={id:post.id, title: $("#title").val(), content: $("#content").val(), attachment: $("#attachment").val(), remarks: $("#remarks").val(), records:subItemsArray};
+  var contentTransformation =  $("#content").val().replace(/\r\n/g,"<br>").replace(/\n/g,"<br>").replace(/\n/g,"<br>").replace(/ /g, "&nbsp;").replace("/\t/g", "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\"/g, "");
+  var postData ={id:post.id, title: $("#title").val(), content:contentTransformation, attachment:$("#attachment").val(), remarks: $("#remarks").val(), records:subItemsArray};
   var postjsonStr = JSON.stringify(postData);
 
   if( isModOper() ) { //修改操作
@@ -73,6 +74,8 @@ function AddSubRecord(){
 var subItemsArray =[];
 
 function SubRecordSubmit(){
+  var contentTransformation = $("#popContent").val().replace(/\r\n/g,"<br>").replace(/\n/g,"<br>").replace(/\n/g,"<br>").replace(/ /g, "&nbsp;").replace("/\t/g", "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\"/g, "");
+  console.log(contentTransformation)
   if( subRecordModIndex === -1 ){ //添加
     var maxId = 0;
     if( subItemsArray.length > 0 ){
@@ -81,12 +84,12 @@ function SubRecordSubmit(){
     }
 
     subItemsArray.push({id:maxId+1, title:$("#popTitle").val(),
-      content:$("#popContent").val(),
+      content:contentTransformation,
       attachment:$("#popAttachment").val(),
       remarks:$("#popRemarks").val()});
   } else { //修改
     subItemsArray[subRecordModIndex].title = $("#popTitle").val();
-    subItemsArray[subRecordModIndex].content = $("#popContent").val();
+    subItemsArray[subRecordModIndex].content = contentTransformation;
     subItemsArray[subRecordModIndex].attachment = $("#popAttachment").val();
     subItemsArray[subRecordModIndex].remarks = $("#popRemarks").val();
   }
