@@ -27,15 +27,15 @@
                         <ul class="nav">
                            <li class="active"><a href="/">首页</a></li>
                              <% if(!locals.user) {%>
-                                 <li><a href="/login">登录</a></li>
-                                 <li><a href="/reg">注册</a></li>
+                                 <li id="navLogin"><a href="/login">登录</a></li>
+                                 <li id="navReg"><a href="/reg">注册</a></li>
                              <% } else {%>
-                                <li><a href="/publish">发布</a></li>
-                                 <li><a href="/goModPwd">用户:<%=locals.user.name%></a></li>
+                                <li id="navPublish"><a href="/publish">发布</a></li>
+                                 <li id="navModPwd"><a href="/goModPwd">用户:<%=locals.user.name%></a></li>
 
                                  <li><a href="/logout">退出</a></li>
                              <% } %>
-                           <li><a href="/about">关于</a></li>
+                           <li  id="navAbout"><a href="/about">关于</a></li>
                         </ul>
                     </div>
                 </div>
@@ -52,4 +52,5 @@
     </body>
     <script src="/javascripts/jquery.js"></script>
     <script src="/javascripts/bootstrap.js"></script>
+    <script src="/javascripts/layout.js"></script>
 </html>

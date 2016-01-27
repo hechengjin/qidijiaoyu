@@ -1,8 +1,10 @@
 window.onload=function(){
+  $('ul.nav > li').removeClass('active');
+  $('#navPublish').addClass('active');
+
   if(isModOper()) {
     initModInfo();
   }
-
 }
 
 var subRecordModIndex = -1;
