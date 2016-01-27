@@ -34,3 +34,17 @@ express -V
     "connect-mongo": "1.0.2"
  但传store参数(会话信息存储在数据库中，便于持久维护)，老报  throw new Error('Connection strategy not found'); 错误
  
+ 
+ 
+ ----启动方法-----------------------
+ 添加服务
+D:\MongoDB\bin\mongod.exe --journal --dbpath=D:\MongoDB\Data\db --logpath=D:\mongodb\log\MongoDB.log --install --serviceName "MongoDB"
+
+移除服务
+mongod --remove
+
+启动web
+运行pathtohere.bat
+cd qiDiJiaoYu
+node ./bin/www
+或 supervisor ./bin/www --调试模式
