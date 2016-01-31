@@ -7,7 +7,13 @@ window.onload=function(){
 }
 
 function initInfo() {
+  document.title = post.title;
   eID("content").innerHTML = post.content;
+  if( post.attachment.length <= 0 ){
+    eID("videoInfo").setAttribute("hidden", true);
+  } else {
+    eID("videoInfo").removeAttribute("hidden");
+  }
 }
 
 function loadCaptions(track) {
