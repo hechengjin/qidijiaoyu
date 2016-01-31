@@ -44,4 +44,3 @@ function recordQueryForModify(recordID){
     //dataType: 'json'
   });
 }
-

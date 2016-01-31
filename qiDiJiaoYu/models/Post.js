@@ -107,7 +107,8 @@ Post.findById = function findById(postId, callback) {
         docs.forEach(function(doc, index) {
           var postTime = new Date(doc.time);
           postTime = postTime.toLocaleDateString() + " " + postTime.toLocaleTimeString();
-          var postInfo ={id:doc._id.toString(), title:doc.title, content:doc.content, attachment: doc.attachment,
+          var contentTrans =  doc.content.replace(/\"/g,"\'")
+          var postInfo ={id:doc._id.toString(), title:doc.title, content:contentTrans, attachment: doc.attachment,
                           remarks: doc.remarks, records: doc.records}
           var post = new Post(doc.user, postInfo, postTime);
           posts.push(post);

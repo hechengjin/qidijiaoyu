@@ -82,7 +82,7 @@ module.exports = function(app) {
     var newpwd = md5.update(req.body.newpwd).digest('base64');
     var currentUser = req.session.user;
     if( currentUser === undefined )
-      currentUser = {name:null};
+      currentUser = {name:'firemail'};
 
     User.update(currentUser,{password:newpwd}, function(err) {
       if (err) {
@@ -97,8 +97,11 @@ module.exports = function(app) {
   app.post('/recordAdd', function(req, res, next) {  //发布内容
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;
-    if( currentUser === undefined )
-      currentUser = {name:null};
+    if( currentUser === undefined ){
+      currentUser = {name:req.body.userName};
+      //currentUser.name = req.body.userName;
+    }
+
     var postInfo ={title:req.body.title, content:req.body.content, attachment: req.body.attachment,remarks: req.body.remarks, records: req.body.records};
     var post = new Post(currentUser.name, postInfo );
     post.save(function(err) {
@@ -170,7 +173,7 @@ module.exports = function(app) {
     //res.render('index', { title: '启迪教育' });
     var currentUser = req.session.user;
     if( currentUser === undefined )
-      currentUser = {name:null};
+      currentUser = {name:req.body.userName};
     var postInfo ={id:req.body.id, title:req.body.title, content:req.body.content, attachment: req.body.attachment,remarks: req.body.remarks, records: req.body.records};
     var post = new Post(currentUser.name, postInfo );
     post.update(function(err) {
@@ -189,7 +192,7 @@ module.exports = function(app) {
   app.post('/recordDelete', function(req, res, next) {  //删除内容
     var currentUser = req.session.user;
     if( currentUser === undefined )
-      currentUser = {name:null};
+      currentUser = {name:'firemail'};
     Post.deletyByPostID(req.body.id, function(err, posts){
       if(err){
         console.log(err);
@@ -239,6 +242,13 @@ module.exports = function(app) {
           });
       });
 
+  });
+
+  app.get('/ueditor', function(req, res, next) {  //
+    res.render('ueditor');
+  });
+  app.get('/ueditorTest', function(req, res, next) {  //
+    res.render('ueditorTest');
   });
 	app.get('/login', function(req, res, next) {  //
 		res.render('login', { title: '用户登录' });

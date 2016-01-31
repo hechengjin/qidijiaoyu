@@ -1,9 +1,14 @@
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
+<script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"> </script>
 <script type="text/javascript">
-    var post = '<%- JSON.stringify(locals.post) %>';
-    if( post.length > 0 )
-       post = JSON.parse(post);
+    var post = <%- JSON.stringify(locals.post) %>
+    if( typeof post !== 'undefined' && post.length > 0 ){
+        post = JSON.parse(post);
+    }
 </script>
 <script type="text/javascript" src="/javascripts/publish.js"></script>
+
 
 <div id='pop-div' style="width: 500px" class="pop-box" >
     <h4>添加子项</h4>
@@ -22,7 +27,9 @@
 <div class="container" background="../images/header_bg.png">
 
     <span class="label label-info">标题</span><input type="text" class="span8" name="title" id="title"><br>
-    <span class="label label-info">内容</span> <textarea class="span8" name="content" id="content"></textarea><br>
+    <span class="label label-info">内容</span> <input type="hidden" name="userName" id="userName" value="<%=locals.user.name%>">
+    <div style="width:100%;"> <script id="editor" type="text/plain" style="width:1024px;height:500px;"></script> </div>
+    <br>
     <span class="label label-info">附件</span> <input type="text" class="span8" name="attachment" id="attachment"><br>
     <span class="label label-info">备注</span> <textarea placeholder="字幕文件路径在这里设置，如：../vtts/5682a2a2b954821c60dd6e25.vtt" class="span8" name="remarks" id="remarks"></textarea><br>
 
@@ -43,7 +50,6 @@
         </table>
     </div>
     <button class="btn btn-lg btn-primary" onclick="recordPublish()">发布</button>
-
 
 </div> <!-- /container -->
 

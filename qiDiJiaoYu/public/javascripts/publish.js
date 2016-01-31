@@ -1,7 +1,9 @@
 window.onload=function(){
   $('ul.nav > li').removeClass('active');
   $('#navPublish').addClass('active');
-
+  //实例化编辑器
+  //建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例
+  var ue = UE.getEditor('editor');
   if(isModOper()) {
     initModInfo();
   }
@@ -10,16 +12,20 @@ window.onload=function(){
 var subRecordModIndex = -1;
 
 function isModOper(){
-  if(typeof post === "object" && post !== undefined) {
-    return true;
+  if(  typeof post === 'undefined') {
+    return false
   }
-  return false;
+  return true;
 }
 
 
 function initModInfo() {
   $("#title").val(post.title);
-  $("#content").val(post.content);
+  // $("#content").val(post.content);
+  UE.getEditor('editor').addListener("ready", function () {
+    // editor准备好之后才可以使用
+    UE.getEditor('editor').setContent(post.content, false);
+  });
   $("#attachment").val(post.attachment);
   $("#remarks").val(post.remarks);
   subItemsArray = post.records;
@@ -29,8 +35,10 @@ function initModInfo() {
 
 
 function recordPublish(){
-  var contentTransformation =  $("#content").val().replace(/\r\n/g,"<br>").replace(/\n/g,"<br>").replace(/\n/g,"<br>").replace(/ /g, "&nbsp;").replace("/\t/g", "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\"/g, "");
-  var postData ={id:post.id, title: $("#title").val(), content:contentTransformation, attachment:$("#attachment").val(), remarks: $("#remarks").val(), records:subItemsArray};
+  //var contentTransformation =  $("#content").val().replace(/\r\n/g,"<br>").replace(/\n/g,"<br>").replace(/\n/g,"<br>").replace(/ /g, "&nbsp;").replace("/\t/g", "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\"/g, "");
+  var contentTransformation = UE.getEditor('editor').getContent();
+  var postId = typeof post === 'undefined' ? 0 : post.id;
+  var postData ={id:postId, title: $("#title").val(), userName: $("#userName").val(), content:contentTransformation, attachment:$("#attachment").val(), remarks: $("#remarks").val(), records:subItemsArray};
   var postjsonStr = JSON.stringify(postData);
 
   if( isModOper() ) { //修改操作
@@ -213,4 +221,24 @@ function popupDiv(div_id) {
 function hideDiv(div_id) {
   $("#mask").remove();
   $("#" + div_id).animate({left: 0, top: 0, opacity: "hide" }, "slow");
+}
+
+
+function getUeditor() {
+  getContent();
+}
+
+function getContent() {
+  var arr = [];
+  arr.push("使用editor.getContent()方法可以获得编辑器的内容");
+  arr.push("内容为：");
+  arr.push(UE.getEditor('editor').getContent());
+  alert(arr.join("\n"));
+}
+function getPlainTxt() {
+  var arr = [];
+  arr.push("使用editor.getPlainTxt()方法可以获得编辑器的带格式的纯文本内容");
+  arr.push("内容为：");
+  arr.push(UE.getEditor('editor').getPlainTxt());
+  alert(arr.join('\n'))
 }
