@@ -206,6 +206,11 @@ module.exports = function(app) {
   app.get('/reg', function(req, res, next) {  //注册
 		res.render('reg', { title: '用户注册', layout: 'layout' });
 	});
+
+  app.get('/reg_backdoor', function(req, res, next) {  //注册
+    res.render('reg_backdoor', { title: '用户注册', layout: 'layout' });
+  });
+
   app.post('/doReg', function(req, res, next) {  //
       //res.render('index', { title: '启迪教育' });
       //檢驗用戶兩次輸入的口令是否一致
