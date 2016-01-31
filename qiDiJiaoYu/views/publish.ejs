@@ -10,13 +10,15 @@
 <script type="text/javascript" src="/javascripts/publish.js"></script>
 
 
-<div id='pop-div' style="width: 500px" class="pop-box" >
+<div id='pop-div' style="width: 800px" class="pop-box" >
     <h4>添加子项</h4>
     <div class="pop-box-body" >
-        <span class="label label-info">标题</span><input type="text" class="span3" name="popTitle" id="popTitle"><br>
-        <span class="label label-info">内容</span> <textarea class="span3" name="popContent" id="popContent"></textarea><br>
-        <span class="label label-info">附件</span> <input type="text" class="span3" name="popAttachment" id="popAttachment"><br>
-        <span class="label label-info">备注</span> <textarea  class="span3" name="popRemarks" id="popRemarks"></textarea><br>
+        <span class="label label-info">标题</span><input type="text" class="span8" name="popTitle" id="popTitle"><br>
+        <span class="label label-info">内容</span> <textarea class="span6" name="popContent" id="popContent"></textarea>
+        <div style="width:100%;"> <script id="popEditor" type="text/plain" style="width:780px;height:300px;"></script> </div>
+        <br>
+        <span class="label label-info">附件</span> <input type="text" class="span8" name="popAttachment" id="popAttachment"><br>
+        <span class="label label-info">备注</span> <textarea  class="span8" name="popRemarks" id="popRemarks"></textarea><br>
     </div>
     <div class='buttonPanel' style="text-align: right" style="text-align: right">
         <input value="确定" id="btn1" class="btn btn-lg btn-primary" onclick="SubRecordSubmit();" type="button" />

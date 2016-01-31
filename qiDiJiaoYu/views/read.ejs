@@ -34,7 +34,7 @@
     <div class="row">
         <%}%>
         <div class="span4">
-            <p><button class="btn btn-success" onclick="play('<%=record.attachment%>','<%=record.content%>','<%=record.remarks%>','<%=record.id%>')"><%=record.title%></button></p>
+            <p><button class="btn btn-success" onclick="play('<%=record.attachment%>','<%=record.content.replace(/\\/g,"\\\\")%>','<%=record.remarks%>','<%=record.id%>')"><%=record.title%></button></p>
         </div>
         <% if(index % 3 === 2) {%>
     </div> <!--结束行--->

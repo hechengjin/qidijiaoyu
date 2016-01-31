@@ -32,8 +32,6 @@ function initModInfo() {
   RefashSubItems();
 }
 
-
-
 function recordPublish(){
   //var contentTransformation =  $("#content").val().replace(/\r\n/g,"<br>").replace(/\n/g,"<br>").replace(/\n/g,"<br>").replace(/ /g, "&nbsp;").replace("/\t/g", "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\"/g, "");
   var contentTransformation = UE.getEditor('editor').getContent();
@@ -84,8 +82,9 @@ function AddSubRecord(){
 var subItemsArray =[];
 
 function SubRecordSubmit(){
-  var contentTransformation = $("#popContent").val().replace(/\r\n/g,"<br>").replace(/\n/g,"<br>").replace(/\n/g,"<br>").replace(/ /g, "&nbsp;").replace("/\t/g", "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\"/g, "");
-  console.log(contentTransformation)
+  //var contentTransformation = $("#popContent").val().replace(/\r\n/g,"<br>").replace(/\n/g,"<br>").replace(/\n/g,"<br>").replace(/ /g, "&nbsp;").replace("/\t/g", "&nbsp;&nbsp;&nbsp;&nbsp;").replace(/\"/g, "");
+  //console.log(contentTransformation)
+  var contentTransformation = UE.getEditor('popEditor').getContent();
   if( subRecordModIndex === -1 ){ //添加
     var maxId = 0;
     if( subItemsArray.length > 0 ){
@@ -123,13 +122,17 @@ function ClearSubItemsTable(){
 
 function itemModify(itemid){
   AddSubRecord();
-
   var itemIndex = subItemsArray.findIndex(function(value, index, arr) {
-    return value.id == itemid;
+    return value.id == itemid;  //这里用 ===就找不到了!
   });
   subRecordModIndex = itemIndex;
   if( itemIndex !== -1 ){
     $("#popTitle").val(subItemsArray[itemIndex].title);
+    var self = this;
+    UE.getEditor('popEditor').addListener("ready", function () {
+      // editor准备好之后才可以使用
+      UE.getEditor('popEditor').setContent(self.subItemsArray[itemIndex].content, false);
+    });
     $("#popContent").val(subItemsArray[itemIndex].content);
     $("#popAttachment").val(subItemsArray[itemIndex].attachment);
     $("#popRemarks").val(subItemsArray[itemIndex].remarks);
@@ -150,6 +153,7 @@ function itemDelete(itemid){
 function AddTableRow(item)
 {
   var subTable = document.getElementById("subitemsTable");   //取得自定义的表对象
+  //alert(subTable.rows.length)
   var newRow = subTable.insertRow(subTable.rows.length);                        //添加行
   //newRow.onclick = selCurRow(newRow);
   var newCellID = newRow.insertCell(newRow.cells.length);                     //添加列
@@ -172,7 +176,8 @@ function AddTableRow(item)
     var rowNum = $('tr').index(tr);
     var colNum = 0; //tr.find('td').index($(this).parents('td'));
     //var value = $('#subitemsTable').rows[rowNum].cells[colNum].innerHTML;
-    var value = document.getElementById("subitemsTable").rows[rowNum].cells[colNum].innerText;
+    //alert(rowNum)
+    var value = document.getElementById("subitemsTable").rows[rowNum-1].cells[colNum].innerText;
     itemModify(value);
     //subTable.tBodies[0].removeChild(this.parentNode.parentNode);
   }
@@ -213,9 +218,11 @@ function popupDiv(div_id) {
     .click(function() {hideDiv(div_id); })
     .appendTo("body")
     .fadeIn(200);
-  div_obj.css({"position": "absolute"})
+  div_obj.css({"position": "relative", "z-index":0})
     .animate({left: windowWidth/2-popupWidth/2,
       top: windowHeight/2-popupHeight/2, opacity: "show" }, "slow");
+
+  var ue = UE.getEditor('popEditor');
 }
 
 function hideDiv(div_id) {
