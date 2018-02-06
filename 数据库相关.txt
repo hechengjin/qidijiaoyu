@@ -30,6 +30,13 @@ update默认只修改查询到的符合条件的第一条。
 -----删除集合中的数据
 db.users.remove({name:"test"});
 
+删除所有数据
+> db.posts.count()
+2
+> db.posts.remove({})
+> db.posts.count()
+0
+
 ---给数据库添加集合 发布内容记录集合(posts)并添加记录 -----创建表   添加记录
 db.posts.insert({user:"admin",title:"大学",content:"大学之道",attachment:"http://www.firemail.wang/guwen/daxue01.mp3",remarks:"译文",time:(new Date().getTime())});
 db.posts.update({user:"admin"},{$set:{time:(new Date().getTime())}});
